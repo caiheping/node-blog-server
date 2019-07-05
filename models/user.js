@@ -59,6 +59,11 @@ module.exports = (sequelize, DataTypes) => {
     is_delete: {
       type: DataTypes.STRING,
       defaultValue: '0'
+    },
+    // 0 代表超级管理员， 1 代表普通用户
+    level: {
+      type: DataTypes.INTEGER,
+      defaultValue: 1
     }
   }, {
   	defaultScope: {

@@ -24,10 +24,13 @@ router.get('/user/findUser', async (ctx, next) => {
   })
   ctx.body = {
     code: 0,
-    page,
-    limit,
-    data: userList.rows,
-    count: userList.count
+    data: {
+      page,
+      limit,
+      rows: userList.rows,
+      count: userList.count
+    }
+    
   }
 })
 
@@ -63,7 +66,7 @@ router.post('/user/addUser', async (ctx, next) => {
 })
 
 // 修改密码
-router.post('/user/updateUser', async (ctx, next) => {
+router.post('/user/updatePwd', async (ctx, next) => {
   let originPwd = ctx.request.body.originPwd ? ctx.request.body.originPwd : '';
   let newPwd = ctx.request.body.newPwd ? ctx.request.body.newPwd : '';
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';

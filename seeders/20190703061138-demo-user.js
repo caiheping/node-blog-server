@@ -14,6 +14,7 @@ module.exports = {
     */
     return queryInterface.bulkInsert('Users', [{
       username: 'admin',
+      level: 0,
       password: 'e10adc3949ba59abbe56e057f20f883e', // 123456 md5加密后的密码
       createdAt: new Date(),
       updatedAt: new Date()

@@ -63,6 +63,7 @@ router.post('/login', async (ctx, next) => {
     data: {
       username: user.get('username'),
       id: user.get('id'),
+      level: user.get('level'),
       avator: user.get('avatar'),
       token
     }
@@ -71,8 +72,14 @@ router.post('/login', async (ctx, next) => {
 
 // 后台管理首页 获取分类的总数
 router.get('/home/getArticleTypeTotal', async (ctx, next) => {
-  let id = ctx.request.body.id ? ctx.request.body.id : '';
-  let res = await Models.User.findOne({
+  let id = ctx.query.id ? parseInt(ctx.query.id) : '';
+  if (!id) {
+    ctx.body = {
+      code: 1,
+      data: '缺少参数'
+    }
+  }
+  let user = await Models.User.findOne({
     where: {
       id
     },
@@ -90,9 +97,42 @@ router.get('/home/getArticleTypeTotal', async (ctx, next) => {
       model: Models.FriendshipLink
     }]
   })
-  ctx.body = {
-    code: 0,
-    data: res
+  if (user.level === 0) {
+    let allArticle = await Models.Article.findAndCountAll()
+    let allUser = await Models.User.findAndCountAll()
+    let allArticleType = await Models.ArticleType.findAndCountAll()
+    let res = {
+      allArticle,
+      allUser,
+      allArticleType
+    }
+    ctx.body = {
+      code: 0,
+      data: res
+    }
+  } else {
+    let res = await Models.User.findOne({
+      where: {
+        id
+      },
+      include: [{
+        model: Models.Skill
+      }, {
+        model: Models.Article
+      }, {
+        model: Models.ArticleType
+      }, {
+        model: Models.Banner
+      }, {
+        model: Models.Note
+      }, {
+        model: Models.FriendshipLink
+      }]
+    })
+    ctx.body = {
+      code: 0,
+      data: res
+    }
   }
 })
 
