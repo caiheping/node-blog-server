@@ -122,13 +122,14 @@ router.post('/article/addArticle', async (ctx, next) => {
   let title = ctx.request.body.title ? ctx.request.body.title : '';
   let content = ctx.request.body.content ? ctx.request.body.content : '';
   let type = ctx.request.body.type ? ctx.request.body.type : '';
-  if (!u_id || !title || !content || !type) {
+  let cover_photo = ctx.request.body.cover_photo ? ctx.request.body.cover_photo : '';
+  if (!u_id || !title || !content || !type || !cover_photo) {
     return ctx.body = {
       code: 1,
       data: '缺少参数'
     }
   }
-  let res = await Models.Article.create({u_id, title, content, type})
+  let res = await Models.Article.create({u_id, title, content, type, cover_photo})
   ctx.body = {
     code: 0,
     data: '添加成功'
@@ -161,8 +162,9 @@ router.post('/article/updateArticle', async (ctx, next) => {
   let title = ctx.request.body.title ? ctx.request.body.title : '';
   let content = ctx.request.body.content ? ctx.request.body.content : '';
   let type = ctx.request.body.type ? ctx.request.body.type : '';
+  let cover_photo = ctx.request.body.cover_photo ? ctx.request.body.cover_photo : '';
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
-  if (!id || !title || !content || !type) {
+  if (!id || !title || !content || !type || !cover_photo) {
     return ctx.body = {
       code: 1,
       data: '缺少参数'
@@ -172,7 +174,8 @@ router.post('/article/updateArticle', async (ctx, next) => {
   let res = await Models.Article.update({
     title,
     content,
-    type
+    type,
+    cover_photo
   },
   {
     where: {

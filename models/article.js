@@ -23,6 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       type: DataTypes.TEXT
     },
+    cover_photo: {
+      allowNull: false,
+      type: DataTypes.STRING
+    },
     type: {
       type: DataTypes.STRING
     },

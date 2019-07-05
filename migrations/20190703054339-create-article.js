@@ -23,6 +23,11 @@ module.exports = {
       type: {
         type: Sequelize.STRING
       },
+      // 封面图片
+      cover_photo: {
+        allowNull: false,
+        type: Sequelize.STRING
+      },
       browse: {
         type: Sequelize.INTEGER,
         defaultValue: 0
