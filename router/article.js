@@ -105,7 +105,10 @@ router.get('/article/findArticle', async (ctx, next) => {
   }
   res = await Models.Article.findAndCountAll({
     offset: (page - 1) * limit,
-    limit: limit
+    limit: limit,
+    include: [{
+      model: Models.Ip
+    }]
   })
   ctx.body = {
     code: 0,

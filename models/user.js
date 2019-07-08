@@ -68,7 +68,7 @@ module.exports = (sequelize, DataTypes) => {
   }, {
   	defaultScope: {
       attributes: {
-        exclude: ['password', 'createdAt', 'updatedAt']
+        exclude: ['password', 'createdAt', 'updatedAt'] // 返回的数据排除这些字段
       }
     }
   });

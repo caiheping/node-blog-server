@@ -29,20 +29,16 @@ module.exports = (sequelize, DataTypes) => {
     },
     type: {
       type: DataTypes.STRING
-    },
-    browse: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
-    },
-    love_number: {
-      type: DataTypes.INTEGER,
-      defaultValue: 0
     }
   }, {});
   Article.associate = function(models) {
     // associations can be defined here
     Article.belongsTo(models.User, {
       foreignKey: 'u_id'
+    });
+
+    Article.hasMany(models.Ip, {
+      foreignKey: 'a_id'
     });
   };
   return Article;

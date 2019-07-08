@@ -74,7 +74,7 @@ router.post('/login', async (ctx, next) => {
 router.get('/home/getArticleTypeTotal', async (ctx, next) => {
   let id = ctx.query.id ? parseInt(ctx.query.id) : '';
   if (!id) {
-    ctx.body = {
+    return ctx.body = {
       code: 1,
       data: '缺少参数'
     }
