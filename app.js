@@ -30,6 +30,7 @@
   app.use(other.routes());
   app.use(article.routes());
 
+  // 测试
   app.use(test.routes());
 
   app.listen(8888);

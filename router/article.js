@@ -7,6 +7,13 @@ const router = new Router();
 router.get('/article/findArticleType', async (ctx, next) => {
   let page = 1
   let limit = 10
+  let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
+  if (!u_id) {
+    return ctx.body = {
+      code: 1,
+      data: '缺少参数'
+    }
+  }
   if (ctx.query.page) {
     page = parseInt(ctx.query.page)
   }
@@ -15,7 +22,10 @@ router.get('/article/findArticleType', async (ctx, next) => {
   }
   res = await Models.ArticleType.findAndCountAll({
     offset: (page - 1) * limit,
-    limit: limit
+    limit: limit,
+    where: {
+      u_id: u_id
+    }
   })
   ctx.body = {
     code: 0,
@@ -23,6 +33,15 @@ router.get('/article/findArticleType', async (ctx, next) => {
     limit,
     data: res.rows,
     count: res.count
+  }
+})
+
+// 查询类型
+router.get('/article/findArticleAllType', async (ctx, next) => {
+  res = await Models.ArticleType.findAll()
+  ctx.body = {
+    code: 0,
+    data: res
   }
 })
 
@@ -97,6 +116,13 @@ router.post('/article/updateArticleType', async (ctx, next) => {
 router.get('/article/findArticle', async (ctx, next) => {
   let page = 1
   let limit = 10
+  let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
+  if (!u_id) {
+    return ctx.body = {
+      code: 1,
+      data: '缺少参数'
+    }
+  }
   if (ctx.query.page) {
     page = parseInt(ctx.query.page)
   }
@@ -106,6 +132,9 @@ router.get('/article/findArticle', async (ctx, next) => {
   res = await Models.Article.findAndCountAll({
     offset: (page - 1) * limit,
     limit: limit,
+    where: {
+      u_id: u_id
+    },
     include: [{
       model: Models.Ip
     }]

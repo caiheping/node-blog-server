@@ -61,10 +61,7 @@ router.post('/login', async (ctx, next) => {
   ctx.body = {
     code: 0,
     data: {
-      username: user.get('username'),
-      id: user.get('id'),
-      level: user.get('level'),
-      avator: user.get('avatar'),
+      userInfo: user,
       token
     }
   }
@@ -97,6 +94,13 @@ router.get('/home/getArticleTypeTotal', async (ctx, next) => {
       model: Models.FriendshipLink
     }]
   })
+  console.log(user)
+  if (!user) {
+    return ctx.body = {
+      code: 1,
+      data: '没有此记录'
+    }
+  }
   if (user.level === 0) {
     let allArticle = await Models.Article.findAndCountAll()
     let allUser = await Models.User.findAndCountAll()
@@ -106,7 +110,7 @@ router.get('/home/getArticleTypeTotal', async (ctx, next) => {
       allUser,
       allArticleType
     }
-    ctx.body = {
+    return ctx.body = {
       code: 0,
       data: res
     }
@@ -129,7 +133,7 @@ router.get('/home/getArticleTypeTotal', async (ctx, next) => {
         model: Models.FriendshipLink
       }]
     })
-    ctx.body = {
+    return ctx.body = {
       code: 0,
       data: res
     }

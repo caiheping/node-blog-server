@@ -5,24 +5,21 @@ const router = new Router();
 
 // 查询轮播图
 router.get('/other/findBanner', async (ctx, next) => {
-  let page = 1
-  let limit = 10
-  if (ctx.query.page) {
-    page = parseInt(ctx.query.page)
+  let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
+  if (!u_id) {
+    return ctx.body = {
+      code: 1,
+      data: '缺少参数'
+    }
   }
-  if (ctx.query.limit) {
-    limit = parseInt(ctx.query.limit)
-  }
-  res = await Models.Banner.findAndCountAll({
-    offset: (page - 1) * limit,
-    limit: limit
+  res = await Models.Banner.findAll({
+    where: {
+      u_id
+    }
   })
   ctx.body = {
     code: 0,
-    page,
-    limit,
-    data: res.rows,
-    count: res.count
+    data: res
   }
 })
 
@@ -97,24 +94,21 @@ router.post('/other/updateBanner', async (ctx, next) => {
 
 // 查询友情链接
 router.get('/other/findFriendshipLink', async (ctx, next) => {
-  let page = 1
-  let limit = 10
-  if (ctx.query.page) {
-    page = parseInt(ctx.query.page)
+  let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
+  if (!u_id) {
+    return ctx.body = {
+      code: 1,
+      data: '缺少参数'
+    }
   }
-  if (ctx.query.limit) {
-    limit = parseInt(ctx.query.limit)
-  }
-  res = await Models.FriendshipLink.findAndCountAll({
-    offset: (page - 1) * limit,
-    limit: limit
+  res = await Models.FriendshipLink.findAll({
+    where: {
+      u_id
+    }
   })
   ctx.body = {
     code: 0,
-    page,
-    limit,
-    data: res.rows,
-    count: res.count
+    data: res
   }
 })
 

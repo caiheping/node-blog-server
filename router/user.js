@@ -233,6 +233,7 @@ router.post('/user/updateSkill', async (ctx, next) => {
 // 编辑个人简介信息
 router.post('/user/updateUserInfo', async (ctx, next) => {
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
+  let avatar = ctx.request.body.avatar ? ctx.request.body.avatar : '';
   let nickname = ctx.request.body.nickname ? ctx.request.body.nickname : '';
   let motto = ctx.request.body.motto ? ctx.request.body.motto : '';
   let hobby = ctx.request.body.hobby ? ctx.request.body.hobby : '';
@@ -251,6 +252,7 @@ router.post('/user/updateUserInfo', async (ctx, next) => {
     }
   }
   let res = await Models.User.update({
+    avatar,
     nickname,
     motto,
     hobby,
@@ -279,6 +281,13 @@ router.post('/user/updateUserInfo', async (ctx, next) => {
 router.get('/user/findNote', async (ctx, next) => {
   let page = 1
   let limit = 10
+  let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
+  if (!u_id) {
+    return ctx.body = {
+      code: 1,
+      data: '缺少参数'
+    }
+  }
   if (ctx.query.page) {
     page = parseInt(ctx.query.page)
   }
@@ -287,7 +296,10 @@ router.get('/user/findNote', async (ctx, next) => {
   }
   userList = await Models.Note.findAndCountAll({
     offset: (page - 1) * limit,
-    limit: limit
+    limit: limit,
+    where: {
+      u_id: u_id
+    }
   })
   ctx.body = {
     code: 0,
@@ -313,6 +325,55 @@ router.post('/user/addNote', async (ctx, next) => {
   ctx.body = {
     code: 0,
     data: '添加成功'
+  }
+})
+
+// 删除个人笔记
+router.post('/user/deleteNote', async (ctx, next) => {
+  let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
+  if (!id) {
+    return ctx.body = {
+      code: 1,
+      data: '缺少参数'
+    }
+  }
+
+  let res = await Models.Note.destroy({
+    where: {
+      id: id
+    }
+  })
+  ctx.body = {
+    code: 0,
+    data: '删除成功'
+  }
+})
+
+// 编辑个人笔记
+router.post('/user/updateNote', async (ctx, next) => {
+  let title = ctx.request.body.title ? ctx.request.body.title : '';
+  let content = ctx.request.body.content ? ctx.request.body.content : '';
+  let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
+  if (!id || !content || !title) {
+    return ctx.body = {
+      code: 1,
+      data: '缺少参数'
+    }
+  }
+
+  let res = await Models.Note.update({
+    content,
+    title
+  },
+  {
+    where: {
+      id: id // 查询条件
+    }
+  })
+
+  ctx.body = {
+    code: 0,
+    data: '修改成功'
   }
 })
 

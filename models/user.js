@@ -56,6 +56,7 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING
     },
+    // 逻辑删除 0 代表未删除， 1 代表删除
     is_delete: {
       type: DataTypes.STRING,
       defaultValue: '0'
