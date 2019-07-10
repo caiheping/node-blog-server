@@ -1,10 +1,10 @@
 const Router = require('koa-router');
-const Models = require('../models/index');
+const Models = require('../../models/index');
 
 const router = new Router();
 
 // 查询轮播图
-router.get('/other/findBanner', async (ctx, next) => {
+router.get('/admin/other/findBanner', async (ctx, next) => {
   let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
   if (!u_id) {
     return ctx.body = {
@@ -24,7 +24,7 @@ router.get('/other/findBanner', async (ctx, next) => {
 })
 
 // 添加轮播图
-router.post('/other/addBanner', async (ctx, next) => {
+router.post('/admin/other/addBanner', async (ctx, next) => {
   let u_id = ctx.request.body.u_id ? parseInt(ctx.request.body.u_id) : '';
   let index = ctx.request.body.index ? parseInt(ctx.request.body.index) : '';
   let url = ctx.request.body.url ? ctx.request.body.url : '';
@@ -43,7 +43,7 @@ router.post('/other/addBanner', async (ctx, next) => {
 })
 
 // 删除轮播图
-router.post('/other/deleteBanner', async (ctx, next) => {
+router.post('/admin/other/deleteBanner', async (ctx, next) => {
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
   if (!id) {
     return ctx.body = {
@@ -64,7 +64,7 @@ router.post('/other/deleteBanner', async (ctx, next) => {
 })
 
 // 修改轮播图
-router.post('/other/updateBanner', async (ctx, next) => {
+router.post('/admin/other/updateBanner', async (ctx, next) => {
   let index = ctx.request.body.index ? parseInt(ctx.request.body.index) : '';
   let url = ctx.request.body.url ? ctx.request.body.url : '';
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
@@ -93,7 +93,7 @@ router.post('/other/updateBanner', async (ctx, next) => {
 
 
 // 查询友情链接
-router.get('/other/findFriendshipLink', async (ctx, next) => {
+router.get('/admin/other/findFriendshipLink', async (ctx, next) => {
   let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
   if (!u_id) {
     return ctx.body = {
@@ -113,7 +113,7 @@ router.get('/other/findFriendshipLink', async (ctx, next) => {
 })
 
 // 添加友情链接
-router.post('/other/addFriendshipLink', async (ctx, next) => {
+router.post('/admin/other/addFriendshipLink', async (ctx, next) => {
   let u_id = ctx.request.body.u_id ? parseInt(ctx.request.body.u_id) : '';
   let title = ctx.request.body.title ? ctx.request.body.title : '';
   let url = ctx.request.body.url ? ctx.request.body.url : '';
@@ -131,7 +131,7 @@ router.post('/other/addFriendshipLink', async (ctx, next) => {
 })
 
 // 删除友情链接
-router.post('/other/deleteFriendshipLink', async (ctx, next) => {
+router.post('/admin/other/deleteFriendshipLink', async (ctx, next) => {
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
   if (!id) {
     return ctx.body = {
@@ -152,7 +152,7 @@ router.post('/other/deleteFriendshipLink', async (ctx, next) => {
 })
 
 // 修改友情链接
-router.post('/other/updateFriendshipLink', async (ctx, next) => {
+router.post('/admin/other/updateFriendshipLink', async (ctx, next) => {
   let title = ctx.request.body.title ? ctx.request.body.title : '';
   let url = ctx.request.body.url ? ctx.request.body.url : '';
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';

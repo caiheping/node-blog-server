@@ -1,12 +1,12 @@
 const Router = require('koa-router');
-const Models = require('../models/index');
+const Models = require('../../models/index');
 const md5 = require('md5');
 
 const router = new Router();
 
 // 用户管理
 // 查看用户
-router.get('/user/findUser', async (ctx, next) => {
+router.get('/admin/user/findUser', async (ctx, next) => {
   let page = 1
   let limit = 10
   if (ctx.query.page) {
@@ -35,7 +35,7 @@ router.get('/user/findUser', async (ctx, next) => {
 })
 
 // 添加用户
-router.post('/user/addUser', async (ctx, next) => {
+router.post('/admin/user/addUser', async (ctx, next) => {
   let username = ctx.request.body.username ? ctx.request.body.username : '';
   let password = ctx.request.body.password ? md5(ctx.request.body.password) : '';
 
@@ -66,7 +66,7 @@ router.post('/user/addUser', async (ctx, next) => {
 })
 
 // 修改密码
-router.post('/user/updatePwd', async (ctx, next) => {
+router.post('/admin/user/updatePwd', async (ctx, next) => {
   let originPwd = ctx.request.body.originPwd ? ctx.request.body.originPwd : '';
   let newPwd = ctx.request.body.newPwd ? ctx.request.body.newPwd : '';
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
@@ -117,7 +117,7 @@ router.post('/user/updatePwd', async (ctx, next) => {
 })
 
 // 删除用户
-router.post('/user/deleteUser', async (ctx, next) => {
+router.post('/admin/user/deleteUser', async (ctx, next) => {
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
   if (!id) {
     return ctx.body = {
@@ -143,7 +143,7 @@ router.post('/user/deleteUser', async (ctx, next) => {
 
 // 个人管理
 // 查询个人技能
-router.get('/user/findSkill', async (ctx, next) => {
+router.get('/admin/user/findSkill', async (ctx, next) => {
   let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : ''
   console.log(ctx.query)
   if (!u_id) {
@@ -164,7 +164,7 @@ router.get('/user/findSkill', async (ctx, next) => {
 })
 
 // 添加个人技能
-router.post('/user/addSkill', async (ctx, next) => {
+router.post('/admin/user/addSkill', async (ctx, next) => {
   let skill = ctx.request.body.skill ? ctx.request.body.skill : ''
   let u_id = ctx.request.body.u_id ? parseInt(ctx.request.body.u_id) : ''
   let proficiency = ctx.request.body.proficiency ? parseInt(ctx.request.body.proficiency) : ''
@@ -182,7 +182,7 @@ router.post('/user/addSkill', async (ctx, next) => {
 })
 
 // 删除个人技能
-router.post('/user/deleteSkill', async (ctx, next) => {
+router.post('/admin/user/deleteSkill', async (ctx, next) => {
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
   if (!id) {
     return ctx.body = {
@@ -203,7 +203,7 @@ router.post('/user/deleteSkill', async (ctx, next) => {
 })
 
 // 修改个人技能
-router.post('/user/updateSkill', async (ctx, next) => {
+router.post('/admin/user/updateSkill', async (ctx, next) => {
   let skill = ctx.request.body.skill ? ctx.request.body.skill : '';
   let proficiency = ctx.request.body.proficiency ? ctx.request.body.proficiency : '';
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
@@ -231,7 +231,7 @@ router.post('/user/updateSkill', async (ctx, next) => {
 })
 
 // 编辑个人简介信息
-router.post('/user/updateUserInfo', async (ctx, next) => {
+router.post('/admin/user/updateUserInfo', async (ctx, next) => {
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
   let avatar = ctx.request.body.avatar ? ctx.request.body.avatar : '';
   let nickname = ctx.request.body.nickname ? ctx.request.body.nickname : '';
@@ -278,7 +278,7 @@ router.post('/user/updateUserInfo', async (ctx, next) => {
 
 // 个人笔记管理
 // 查询个人笔记
-router.get('/user/findNote', async (ctx, next) => {
+router.get('/admin/user/findNote', async (ctx, next) => {
   let page = 1
   let limit = 10
   let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
@@ -311,7 +311,7 @@ router.get('/user/findNote', async (ctx, next) => {
 })
 
 // 添加个人笔记
-router.post('/user/addNote', async (ctx, next) => {
+router.post('/admin/user/addNote', async (ctx, next) => {
   let u_id = ctx.request.body.u_id ? parseInt(ctx.request.body.u_id) : '';
   let title = ctx.request.body.title ? ctx.request.body.title : '';
   let content = ctx.request.body.content ? ctx.request.body.content : '';
@@ -329,7 +329,7 @@ router.post('/user/addNote', async (ctx, next) => {
 })
 
 // 删除个人笔记
-router.post('/user/deleteNote', async (ctx, next) => {
+router.post('/admin/user/deleteNote', async (ctx, next) => {
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
   if (!id) {
     return ctx.body = {
@@ -350,7 +350,7 @@ router.post('/user/deleteNote', async (ctx, next) => {
 })
 
 // 编辑个人笔记
-router.post('/user/updateNote', async (ctx, next) => {
+router.post('/admin/user/updateNote', async (ctx, next) => {
   let title = ctx.request.body.title ? ctx.request.body.title : '';
   let content = ctx.request.body.content ? ctx.request.body.content : '';
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';

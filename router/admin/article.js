@@ -1,10 +1,10 @@
 const Router = require('koa-router');
-const Models = require('../models/index');
+const Models = require('../../models/index');
 
 const router = new Router();
 
 // 查询类型
-router.get('/article/findArticleType', async (ctx, next) => {
+router.get('/admin/article/findArticleType', async (ctx, next) => {
   let page = 1
   let limit = 10
   let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
@@ -37,7 +37,7 @@ router.get('/article/findArticleType', async (ctx, next) => {
 })
 
 // 查询类型
-router.get('/article/findArticleAllType', async (ctx, next) => {
+router.get('/admin/article/findArticleAllType', async (ctx, next) => {
   res = await Models.ArticleType.findAll()
   ctx.body = {
     code: 0,
@@ -46,7 +46,7 @@ router.get('/article/findArticleAllType', async (ctx, next) => {
 })
 
 // 添加类型
-router.post('/article/addArticleType', async (ctx, next) => {
+router.post('/admin/article/addArticleType', async (ctx, next) => {
   let u_id = ctx.request.body.u_id ? parseInt(ctx.request.body.u_id) : '';
   let title = ctx.request.body.title ? ctx.request.body.title : '';
   console.log(u_id, title)
@@ -64,7 +64,7 @@ router.post('/article/addArticleType', async (ctx, next) => {
 })
 
 // 删除类型
-router.post('/article/deleteArticleType', async (ctx, next) => {
+router.post('/admin/article/deleteArticleType', async (ctx, next) => {
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
   if (!id) {
     return ctx.body = {
@@ -85,7 +85,7 @@ router.post('/article/deleteArticleType', async (ctx, next) => {
 })
 
 // 修改类型
-router.post('/article/updateArticleType', async (ctx, next) => {
+router.post('/admin/article/updateArticleType', async (ctx, next) => {
   let title = ctx.request.body.title ? ctx.request.body.title : '';
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
   if (!id || !title) {
@@ -113,7 +113,7 @@ router.post('/article/updateArticleType', async (ctx, next) => {
 
 
 // 查询文章
-router.get('/article/findArticle', async (ctx, next) => {
+router.get('/admin/article/findArticle', async (ctx, next) => {
   let page = 1
   let limit = 10
   let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
@@ -149,7 +149,7 @@ router.get('/article/findArticle', async (ctx, next) => {
 })
 
 // 添加文章
-router.post('/article/addArticle', async (ctx, next) => {
+router.post('/admin/article/addArticle', async (ctx, next) => {
   let u_id = ctx.request.body.u_id ? parseInt(ctx.request.body.u_id) : '';
   let title = ctx.request.body.title ? ctx.request.body.title : '';
   let content = ctx.request.body.content ? ctx.request.body.content : '';
@@ -169,7 +169,7 @@ router.post('/article/addArticle', async (ctx, next) => {
 })
 
 // 删除文章
-router.post('/article/deleteArticle', async (ctx, next) => {
+router.post('/admin/article/deleteArticle', async (ctx, next) => {
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
   if (!id) {
     return ctx.body = {
@@ -190,7 +190,7 @@ router.post('/article/deleteArticle', async (ctx, next) => {
 })
 
 // 修改文章
-router.post('/article/updateArticle', async (ctx, next) => {
+router.post('/admin/article/updateArticle', async (ctx, next) => {
   let title = ctx.request.body.title ? ctx.request.body.title : '';
   let content = ctx.request.body.content ? ctx.request.body.content : '';
   let type = ctx.request.body.type ? ctx.request.body.type : '';

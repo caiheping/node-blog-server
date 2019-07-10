@@ -1,5 +1,5 @@
 const Router = require('koa-router');
-const Models = require('../models/index');
+const Models = require('../../models/index');
 const md5 = require('md5');
 const fs = require('fs');
 const path = require('path');
@@ -51,11 +51,13 @@ router.post('/login', async (ctx, next) => {
       username: user.get('username')
     },
     secret,
-    {expiresIn: '1h'}
+    {expiresIn: 60*60*1000}
   )
 
+  ctx.session.token = token
   ctx.cookies.set('token', token, {
-    httpOnly: false
+    httpOnly: false,
+    maxAge: 1000*60*60 // 设置token过期时间
   });
 
   ctx.body = {
@@ -68,7 +70,7 @@ router.post('/login', async (ctx, next) => {
 });
 
 // 后台管理首页 获取分类的总数
-router.get('/home/getArticleTypeTotal', async (ctx, next) => {
+router.get('/admin/home/getArticleTypeTotal', async (ctx, next) => {
   let id = ctx.query.id ? parseInt(ctx.query.id) : '';
   if (!id) {
     return ctx.body = {
@@ -94,7 +96,6 @@ router.get('/home/getArticleTypeTotal', async (ctx, next) => {
       model: Models.FriendshipLink
     }]
   })
-  console.log(user)
   if (!user) {
     return ctx.body = {
       code: 1,
@@ -141,7 +142,7 @@ router.get('/home/getArticleTypeTotal', async (ctx, next) => {
 })
 
 // 图片上传
-router.post('/uploadImg', async (ctx, next) => {
+router.post('/admin/uploadImg', async (ctx, next) => {
   const file = ctx.request.files.file; // 上传的文件在ctx.request.files.file
     // 创建可读流
     const reader = fs.createReadStream(file.path);
