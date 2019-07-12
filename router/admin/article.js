@@ -1,5 +1,7 @@
 const Router = require('koa-router');
 const Models = require('../../models/index');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const router = new Router();
 
@@ -8,10 +10,20 @@ router.get('/admin/article/findArticleType', async (ctx, next) => {
   let page = 1
   let limit = 10
   let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
+  let title = ctx.query.title ? ctx.query.title : '';
+  let query = {
+    u_id
+  }
   if (!u_id) {
     return ctx.body = {
       code: 1,
       data: '缺少参数'
+    }
+  }
+  if (title) {
+    query.title = {
+      // 模糊查询
+      [Op.like]:'%' +title + '%'
     }
   }
   if (ctx.query.page) {
@@ -23,9 +35,10 @@ router.get('/admin/article/findArticleType', async (ctx, next) => {
   res = await Models.ArticleType.findAndCountAll({
     offset: (page - 1) * limit,
     limit: limit,
-    where: {
-      u_id: u_id
-    }
+    where: query,
+    order: [
+      ['createdAt', 'DESC']
+    ]
   })
   ctx.body = {
     code: 0,
@@ -36,9 +49,13 @@ router.get('/admin/article/findArticleType', async (ctx, next) => {
   }
 })
 
-// 查询类型
+// 查询所有类型
 router.get('/admin/article/findArticleAllType', async (ctx, next) => {
-  res = await Models.ArticleType.findAll()
+  res = await Models.ArticleType.findAll({
+    order: [
+      ['createdAt', 'DESC']
+    ]
+  })
   ctx.body = {
     code: 0,
     data: res
@@ -117,10 +134,24 @@ router.get('/admin/article/findArticle', async (ctx, next) => {
   let page = 1
   let limit = 10
   let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
+  let type = ctx.query.type ? ctx.query.type : '';
+  let title = ctx.query.title ? ctx.query.title : '';
+  let query = {
+    u_id
+  }
   if (!u_id) {
     return ctx.body = {
       code: 1,
       data: '缺少参数'
+    }
+  }
+  if (type) {
+    query.type = type
+  }
+  if (title) {
+    query.title = {
+      // 模糊查询
+      [Op.like]:'%' +title + '%'
     }
   }
   if (ctx.query.page) {
@@ -129,12 +160,14 @@ router.get('/admin/article/findArticle', async (ctx, next) => {
   if (ctx.query.limit) {
     limit = parseInt(ctx.query.limit)
   }
+  console.log(query)
   res = await Models.Article.findAndCountAll({
     offset: (page - 1) * limit,
     limit: limit,
-    where: {
-      u_id: u_id
-    },
+    where: query,
+    order: [
+      ['createdAt', 'DESC']
+    ],
     include: [{
       model: Models.Ip
     }]

@@ -20,6 +20,10 @@ module.exports = {
         allowNull: false,
         type: Sequelize.INTEGER
       },
+      hot: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
       type: {
         type: Sequelize.STRING
       },

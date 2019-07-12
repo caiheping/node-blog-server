@@ -1,21 +1,31 @@
 const Router = require('koa-router');
 const Models = require('../../models/index');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const router = new Router();
 
 // 查询轮播图
 router.get('/admin/other/findBanner', async (ctx, next) => {
   let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
+  let index = ctx.query.index ? parseInt(ctx.query.index) : '';
+  let query = {
+    u_id
+  }
   if (!u_id) {
     return ctx.body = {
       code: 1,
       data: '缺少参数'
     }
   }
+  if (index) {
+    query.index = index
+  }
   res = await Models.Banner.findAll({
-    where: {
-      u_id
-    }
+    where: query,
+    order: [
+      ['createdAt', 'DESC']
+    ]
   })
   ctx.body = {
     code: 0,
@@ -95,16 +105,26 @@ router.post('/admin/other/updateBanner', async (ctx, next) => {
 // 查询友情链接
 router.get('/admin/other/findFriendshipLink', async (ctx, next) => {
   let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
+  let title = ctx.query.title ? ctx.query.title : '';
+  let query = {
+    u_id
+  }
   if (!u_id) {
     return ctx.body = {
       code: 1,
       data: '缺少参数'
     }
   }
-  res = await Models.FriendshipLink.findAll({
-    where: {
-      u_id
+  if (title) {
+    query.title = {
+      [Op.like]: '%' +title + '%'
     }
+  }
+  res = await Models.FriendshipLink.findAll({
+    where: query,
+    order: [
+      ['createdAt', 'DESC']
+    ]
   })
   ctx.body = {
     code: 0,

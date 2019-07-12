@@ -12,6 +12,14 @@
   const a_other = require('./router/admin/other');
   const a_article = require('./router/admin/article');
 
+  const f_user = require('./router/front/user');
+  const f_article = require('./router/front/article');
+
+  const getUploadFileExt = require('./utils/getUploadFileExt');
+  const getUploadFileName = require('./utils/getUploadFileName');
+  const checkDirExist = require('./utils/checkDirExist');
+  const getUploadDirName = require('./utils/getUploadDirName');
+
   const app = new Koa();
 
   // 静态资源 例如：http://127.0.0.1:8888/static/upload/1562297696067.png
@@ -38,8 +46,23 @@
   app.use(koaBody({
     multipart:true, // 支持文件上传
     formidable:{
+      uploadDir:path.join(__dirname,'static/upload'),
       keepExtensions: true,    // 保持文件的后缀
       maxFieldsSize:200 * 1024 * 1024, // 文件上传大小
+      onFileBegin:(name,file) => {
+        // console.log(file);
+        // 获取文件后缀
+        const ext = getUploadFileExt(file.name);
+        // 最终要保存到的文件夹目录
+        const dir = path.join(__dirname,`static/upload`);
+        // 检查文件夹是否存在如果不存在则新建文件夹
+        checkDirExist(dir);
+        // 重新覆盖 file.path 属性
+        file.path = `${dir}/${getUploadFileName(ext)}`;
+      },
+      onError:(err)=>{
+        console.log(err);
+      }
     }
   }));
 
@@ -50,6 +73,10 @@
   app.use(a_user.routes());
   app.use(a_other.routes());
   app.use(a_article.routes());
+
+  // front
+  app.use(f_user.routes());
+  app.use(f_article.routes());
 
   app.listen(8888);
 })()

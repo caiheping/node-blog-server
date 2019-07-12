@@ -8,7 +8,8 @@ const checkToken = () => {
         cookies.forEach(item => {
           obj[item.split('=')[0].trim()] = item.split('=')[1].trim()
         })
-        if (obj.token !== ctx.session.token) {
+        console.log(obj.token)
+        if (!obj.token || obj.token !== ctx.session.token) {
           return ctx.body = {
             code: 401,
             data: '请重新登录',

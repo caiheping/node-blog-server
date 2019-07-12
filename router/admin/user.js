@@ -1,6 +1,9 @@
 const Router = require('koa-router');
 const Models = require('../../models/index');
 const md5 = require('md5');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
+
 
 const router = new Router();
 
@@ -9,16 +12,26 @@ const router = new Router();
 router.get('/admin/user/findUser', async (ctx, next) => {
   let page = 1
   let limit = 10
+  let username = ctx.query.username ? ctx.query.username : ''
+  let query = {
+    is_delete: 0
+  }
   if (ctx.query.page) {
     page = parseInt(ctx.query.page)
   }
   if (ctx.query.limit) {
     limit = parseInt(ctx.query.limit)
   }
+  if (username) {
+    query.username = {
+      [Op.like]:'%' +username + '%'
+    }
+  }
   userList = await Models.User.findAndCountAll({
-    where: {
-      is_delete: 0
-    },
+    where: query,
+    order: [
+      ['createdAt', 'DESC']
+    ],
     offset: (page - 1) * limit,
     limit: limit
   })
@@ -145,7 +158,6 @@ router.post('/admin/user/deleteUser', async (ctx, next) => {
 // 查询个人技能
 router.get('/admin/user/findSkill', async (ctx, next) => {
   let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : ''
-  console.log(ctx.query)
   if (!u_id) {
     return ctx.body = {
       code: 1,
@@ -155,7 +167,10 @@ router.get('/admin/user/findSkill', async (ctx, next) => {
   let res = await Models.Skill.findAll({
     where: {
       u_id: u_id
-    }
+    },
+    order: [
+      ['createdAt', 'DESC']
+    ]
   })
   ctx.body = {
     code: 0,
@@ -282,10 +297,20 @@ router.get('/admin/user/findNote', async (ctx, next) => {
   let page = 1
   let limit = 10
   let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
+  let title = ctx.query.title ? ctx.query.title : '';
+  let query = {
+    u_id
+  }
   if (!u_id) {
     return ctx.body = {
       code: 1,
       data: '缺少参数'
+    }
+  }
+  if (title) {
+    query.title = {
+      // 模糊查询
+      [Op.like]:'%' +title + '%'
     }
   }
   if (ctx.query.page) {
@@ -297,9 +322,10 @@ router.get('/admin/user/findNote', async (ctx, next) => {
   userList = await Models.Note.findAndCountAll({
     offset: (page - 1) * limit,
     limit: limit,
-    where: {
-      u_id: u_id
-    }
+    where: query,
+    order: [
+      ['createdAt', 'DESC']
+    ]
   })
   ctx.body = {
     code: 0,
