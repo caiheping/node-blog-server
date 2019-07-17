@@ -23,6 +23,14 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       defaultValue: 0
     },
+    love: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
+    browse: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    },
     content: {
       allowNull: false,
       type: DataTypes.TEXT

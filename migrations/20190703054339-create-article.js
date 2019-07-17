@@ -24,6 +24,14 @@ module.exports = {
         type: Sequelize.INTEGER,
         defaultValue: 0
       },
+      love: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
+      browse: {
+        type: Sequelize.INTEGER,
+        defaultValue: 0
+      },
       type: {
         type: Sequelize.STRING
       },

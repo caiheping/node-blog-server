@@ -160,7 +160,6 @@ router.get('/admin/article/findArticle', async (ctx, next) => {
   if (ctx.query.limit) {
     limit = parseInt(ctx.query.limit)
   }
-  console.log(query)
   res = await Models.Article.findAndCountAll({
     offset: (page - 1) * limit,
     limit: limit,

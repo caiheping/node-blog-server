@@ -12,6 +12,8 @@
   const a_other = require('./router/admin/other');
   const a_article = require('./router/admin/article');
 
+  const f_home = require('./router/front/home');
+  const f_technique = require('./router/front/technique');
   const f_user = require('./router/front/user');
   const f_article = require('./router/front/article');
 
@@ -24,6 +26,11 @@
 
   // 静态资源 例如：http://127.0.0.1:8888/static/upload/1562297696067.png
   app.use(static(__dirname, 'static'));
+
+  // http://127.0.0.1:8888/#/login
+  app.use(static(
+    path.join(__dirname, './dist')
+  ))
 
   // 配置session
   app.keys = ['some secret hurr'];
@@ -74,7 +81,9 @@
   app.use(a_other.routes());
   app.use(a_article.routes());
 
-  // front
+  // front 
+  app.use(f_home.routes());
+  app.use(f_technique.routes());
   app.use(f_user.routes());
   app.use(f_article.routes());
 
