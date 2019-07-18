@@ -166,10 +166,7 @@ router.get('/admin/article/findArticle', async (ctx, next) => {
     where: query,
     order: [
       ['createdAt', 'DESC']
-    ],
-    include: [{
-      model: Models.Ip
-    }]
+    ]
   })
   ctx.body = {
     code: 0,
@@ -184,16 +181,17 @@ router.get('/admin/article/findArticle', async (ctx, next) => {
 router.post('/admin/article/addArticle', async (ctx, next) => {
   let u_id = ctx.request.body.u_id ? parseInt(ctx.request.body.u_id) : '';
   let title = ctx.request.body.title ? ctx.request.body.title : '';
+  let preface = ctx.request.body.preface ? ctx.request.body.preface : '';
   let content = ctx.request.body.content ? ctx.request.body.content : '';
   let type = ctx.request.body.type ? ctx.request.body.type : '';
   let cover_photo = ctx.request.body.cover_photo ? ctx.request.body.cover_photo : '';
-  if (!u_id || !title || !content || !type || !cover_photo) {
+  if (!u_id || !title || !preface || !content || !type || !cover_photo) {
     return ctx.body = {
       code: 1,
       data: '缺少参数'
     }
   }
-  let res = await Models.Article.create({u_id, title, content, type, cover_photo})
+  let res = await Models.Article.create({u_id, title, content, type, cover_photo, preface})
   ctx.body = {
     code: 0,
     data: '添加成功'
@@ -224,11 +222,12 @@ router.post('/admin/article/deleteArticle', async (ctx, next) => {
 // 修改文章
 router.post('/admin/article/updateArticle', async (ctx, next) => {
   let title = ctx.request.body.title ? ctx.request.body.title : '';
+  let preface = ctx.request.body.preface ? ctx.request.body.preface : '';
   let content = ctx.request.body.content ? ctx.request.body.content : '';
   let type = ctx.request.body.type ? ctx.request.body.type : '';
   let cover_photo = ctx.request.body.cover_photo ? ctx.request.body.cover_photo : '';
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
-  if (!id || !title || !content || !type || !cover_photo) {
+  if (!id || !title || !preface || !content || !type || !cover_photo) {
     return ctx.body = {
       code: 1,
       data: '缺少参数'
@@ -239,7 +238,8 @@ router.post('/admin/article/updateArticle', async (ctx, next) => {
     title,
     content,
     type,
-    cover_photo
+    cover_photo,
+    preface
   },
   {
     where: {

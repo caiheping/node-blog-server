@@ -74,4 +74,29 @@ router.get('/fornt/article/findArticle', async (ctx, next) => {
   }
 })
 
+// 查询文章
+router.get('/fornt/article/findArticleById', async (ctx, next) => {
+  let id = ctx.query.id ? parseInt(ctx.query.id) : '';
+  let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
+  let query = {
+    id
+  }
+  if (!id) {
+    return ctx.body = {
+      code: 1,
+      data: '缺少参数'
+    }
+  }
+  res = await Models.Article.findOne({
+    where: query,
+    include: [{
+      model: Models.Ip
+    }]
+  })
+  ctx.body = {
+    code: 0,
+    data: res
+  }
+})
+
 module.exports = router
