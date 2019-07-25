@@ -16,7 +16,7 @@ npx sequelize-cli db:seed:all   // 生成种子文件
 node ./app.js   // 启动服务器
 ```
 
-打开浏览器输入： http://127.0.0.1:8888/ 就可以访问项目啦
+打开浏览器输入： http://127.0.0.1:8888/ 就可以访问项目啦(前端代码地址：https://github.com/caiheping/node-blog-client)
 
 登录账号：admin，密码： 123456
 
