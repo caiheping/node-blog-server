@@ -32,7 +32,7 @@ router.get('/admin/article/findArticleType', async (ctx, next) => {
   if (ctx.query.limit) {
     limit = parseInt(ctx.query.limit)
   }
-  res = await Models.ArticleType.findAndCountAll({
+  let res = await Models.ArticleType.findAndCountAll({
     offset: (page - 1) * limit,
     limit: limit,
     where: query,
@@ -51,7 +51,7 @@ router.get('/admin/article/findArticleType', async (ctx, next) => {
 
 // 查询所有类型
 router.get('/admin/article/findArticleAllType', async (ctx, next) => {
-  res = await Models.ArticleType.findAll({
+  let res = await Models.ArticleType.findAll({
     order: [
       ['createdAt', 'DESC']
     ]
@@ -160,7 +160,7 @@ router.get('/admin/article/findArticle', async (ctx, next) => {
   if (ctx.query.limit) {
     limit = parseInt(ctx.query.limit)
   }
-  res = await Models.Article.findAndCountAll({
+  let res = await Models.Article.findAndCountAll({
     offset: (page - 1) * limit,
     limit: limit,
     where: query,

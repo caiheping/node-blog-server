@@ -27,7 +27,7 @@ router.get('/admin/user/findUser', async (ctx, next) => {
       [Op.like]:'%' +username + '%'
     }
   }
-  userList = await Models.User.findAndCountAll({
+  let userList = await Models.User.findAndCountAll({
     where: query,
     order: [
       ['createdAt', 'DESC']
@@ -43,7 +43,7 @@ router.get('/admin/user/findUser', async (ctx, next) => {
       rows: userList.rows,
       count: userList.count
     }
-    
+
   }
 })
 
@@ -319,7 +319,7 @@ router.get('/admin/user/findNote', async (ctx, next) => {
   if (ctx.query.limit) {
     limit = parseInt(ctx.query.limit)
   }
-  userList = await Models.Note.findAndCountAll({
+  let userList = await Models.Note.findAndCountAll({
     offset: (page - 1) * limit,
     limit: limit,
     where: query,

@@ -1,7 +1,5 @@
 const Router = require('koa-router');
 const Models = require('../../models/index');
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
 
 
 const router = new Router();
@@ -18,7 +16,7 @@ router.get('/fornt/article/findArticleType', async (ctx, next) => {
       data: '缺少参数'
     }
   }
-  res = await Models.ArticleType.findAll({
+  let res = await Models.ArticleType.findAll({
     where: query,
     order: [
       ['createdAt', 'DESC']
@@ -54,7 +52,7 @@ router.get('/fornt/article/findArticle', async (ctx, next) => {
   if (ctx.query.limit) {
     limit = parseInt(ctx.query.limit)
   }
-  res = await Models.Article.findAndCountAll({
+  let res = await Models.Article.findAndCountAll({
     offset: (page - 1) * limit,
     limit: limit,
     where: query,
@@ -77,7 +75,6 @@ router.get('/fornt/article/findArticle', async (ctx, next) => {
 // 查询文章
 router.get('/fornt/article/findArticleById', async (ctx, next) => {
   let id = ctx.query.id ? parseInt(ctx.query.id) : '';
-  let u_id = ctx.query.u_id ? parseInt(ctx.query.u_id) : '';
   let query = {
     id
   }
@@ -87,7 +84,7 @@ router.get('/fornt/article/findArticleById', async (ctx, next) => {
       data: '缺少参数'
     }
   }
-  res = await Models.Article.findOne({
+  let res = await Models.Article.findOne({
     where: query,
     include: [{
       model: Models.Ip
@@ -96,6 +93,99 @@ router.get('/fornt/article/findArticleById', async (ctx, next) => {
   ctx.body = {
     code: 0,
     data: res
+  }
+})
+
+// 设置浏览量
+router.post('/fornt/article/setBrowse', async (ctx, next) => {
+  let a_id = ctx.request.body.a_id
+  let ip = ctx.header['x-forwarded-for']
+  if (!a_id || !ip) {
+    return ctx.body = {
+      code: 1,
+      data: '缺少参数'
+    }
+  }
+  let ipResult = await Models.Ip.findOne({
+    where: {
+      ip,
+      a_id
+    }
+  })
+  if (ipResult) {
+    ctx.body = {
+      code: 0
+    }
+  } else {
+    let res = await Models.Article.findOne({
+      where: {
+        id: a_id
+      }
+    })
+    let browse = res.browse + 1
+    await Models.Article.update({
+      browse
+    },{
+      where: {
+        id: a_id
+      }
+    })
+    await Models.Ip.create({
+      a_id,
+      ip
+    })
+    ctx.body = {
+      code: 0
+    }
+  }
+})
+
+// 喜欢
+router.post('/front/article/like', async (ctx, next) => {
+  let a_id = ctx.request.body.a_id
+  let ip = ctx.header['x-forwarded-for']
+  if (!a_id || !ip) {
+    return ctx.body = {
+      code: 1,
+      data: '缺少参数'
+    }
+  }
+  let ipResult = await Models.Ip.findOne({
+    where: {
+      ip,
+      a_id
+    }
+  })
+  if (ipResult && !ipResult.is_love) {
+    let res = await Models.Article.findOne({
+      where: {
+        id: a_id
+      }
+    })
+    let love = res.love + 1
+    await Models.Article.update({
+      love
+    },{
+      where: {
+        id: a_id
+      }
+    })
+    await Models.Ip.update({
+      is_love: 1
+    },{
+      where: {
+        a_id,
+        ip
+      }
+    })
+    ctx.body = {
+      code: 0
+    }
+  } else {
+    ctx.body = {
+      code: 1,
+      data: '不能重复添加喜欢'
+    }
   }
 })
 

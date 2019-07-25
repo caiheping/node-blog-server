@@ -1,7 +1,5 @@
 const Router = require('koa-router');
 const Models = require('../../models/index');
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
 
 
 const router = new Router();
@@ -60,7 +58,7 @@ router.get('/front/user/findNote', async (ctx, next) => {
       data: '缺少参数'
     }
   }
-  res = await Models.Note.findAll({
+  let res = await Models.Note.findAll({
     where: query,
     order: [
       ['createdAt', 'DESC']

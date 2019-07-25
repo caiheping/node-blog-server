@@ -1,8 +1,6 @@
 const Router = require('koa-router');
 const Models = require('../../models/index');
 const md5 = require('md5');
-const fs = require('fs');
-const path = require('path');
 const jwt = require('jsonwebtoken')
 
 const router = new Router();
@@ -70,7 +68,7 @@ router.post('/login', async (ctx, next) => {
 });
 
 // 后台管理首页 获取分类的总数
-router.get('/admin/home/getArticleTypeTotal', async (ctx, next) => {
+router.get('/admin/home', async (ctx, next) => {
   let id = ctx.query.id ? parseInt(ctx.query.id) : '';
   if (!id) {
     return ctx.body = {
@@ -81,20 +79,7 @@ router.get('/admin/home/getArticleTypeTotal', async (ctx, next) => {
   let user = await Models.User.findOne({
     where: {
       id
-    },
-    include: [{
-      model: Models.Skill
-    }, {
-      model: Models.Article
-    }, {
-      model: Models.ArticleType
-    }, {
-      model: Models.Banner
-    }, {
-      model: Models.Note
-    }, {
-      model: Models.FriendshipLink
-    }]
+    }
   })
   if (!user) {
     return ctx.body = {
@@ -102,41 +87,39 @@ router.get('/admin/home/getArticleTypeTotal', async (ctx, next) => {
       data: '没有此记录'
     }
   }
+  let allArticle
+  let allUser
+  let allNote
   if (user.level === 0) {
-    let allArticle = await Models.Article.findAndCountAll()
-    let allUser = await Models.User.findAndCountAll()
-    let allArticleType = await Models.ArticleType.findAndCountAll()
-    let res = {
-      allArticle,
-      allUser,
-      allArticleType
-    }
+    console.log(999)
+    allArticle = await Models.Article.count()
+    allUser = await Models.User.count()
+    allNote = await Models.Note.count()
     return ctx.body = {
       code: 0,
-      data: res
+      data: {
+        allArticle,
+        allUser,
+        allNote
+      }
     }
   } else {
-    let res = await Models.User.findOne({
+    allArticle = await Models.Article.count({
       where: {
-        id
-      },
-      include: [{
-        model: Models.Skill
-      }, {
-        model: Models.Article
-      }, {
-        model: Models.ArticleType
-      }, {
-        model: Models.Banner
-      }, {
-        model: Models.Note
-      }, {
-        model: Models.FriendshipLink
-      }]
+        u_id: id
+      }
+    })
+    allNote = await Models.Note.count({
+      where: {
+        u_id: id
+      }
     })
     return ctx.body = {
       code: 0,
-      data: res
+      data: {
+        allArticle,
+        allNote
+      }
     }
   }
 })

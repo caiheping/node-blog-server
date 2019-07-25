@@ -1,7 +1,5 @@
 const Router = require('koa-router');
 const Models = require('../../models/index');
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
 
 
 const router = new Router();
@@ -17,34 +15,34 @@ router.get('/front/home', async (ctx, next) => {
       data: '缺少参数'
     }
   }
-  banners = await Models.Banner.findAll({
+  let banners = await Models.Banner.findAll({
     where: query,
     order: [
       ['createdAt', 'DESC']
     ]
   })
-  hots = await Models.Article.findAll({
+  let hots = await Models.Article.findAll({
     limit: 5,
     where: query,
     order: [
       ['hot', 'DESC']
     ]
   })
-  loves = await Models.Article.findAll({
+  let loves = await Models.Article.findAll({
     limit: 6,
     where: query,
     order: [
       ['love', 'DESC']
     ]
   })
-  articles = await Models.Article.findAll({
+  let articles = await Models.Article.findAll({
     limit: 10,
     where: query,
     order: [
       ['createdAt', 'DESC']
     ]
   })
-  links = await Models.FriendshipLink.findAll({
+  let links = await Models.FriendshipLink.findAll({
     where: query,
     order: [
       ['createdAt', 'DESC']

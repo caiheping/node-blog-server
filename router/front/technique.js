@@ -1,7 +1,5 @@
 const Router = require('koa-router');
 const Models = require('../../models/index');
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
 
 
 const router = new Router();
@@ -30,7 +28,7 @@ router.get('/front/technique', async (ctx, next) => {
   if (ctx.query.limit) {
     limit = parseInt(ctx.query.limit)
   }
-  res = await Models.Article.findAndCountAll({
+  let res = await Models.Article.findAndCountAll({
     offset: (page - 1) * limit,
     limit: limit,
     where: query,

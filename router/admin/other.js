@@ -21,7 +21,7 @@ router.get('/admin/other/findBanner', async (ctx, next) => {
   if (index) {
     query.index = index
   }
-  res = await Models.Banner.findAll({
+  let res = await Models.Banner.findAll({
     where: query,
     order: [
       ['createdAt', 'DESC']
@@ -38,7 +38,6 @@ router.post('/admin/other/addBanner', async (ctx, next) => {
   let u_id = ctx.request.body.u_id ? parseInt(ctx.request.body.u_id) : '';
   let index = ctx.request.body.index ? parseInt(ctx.request.body.index) : '';
   let url = ctx.request.body.url ? ctx.request.body.url : '';
-  console.log(u_id, index, url)
   if (!u_id || !index || !url) {
     return ctx.body = {
       code: 1,
@@ -120,7 +119,7 @@ router.get('/admin/other/findFriendshipLink', async (ctx, next) => {
       [Op.like]: '%' +title + '%'
     }
   }
-  res = await Models.FriendshipLink.findAll({
+  let res = await Models.FriendshipLink.findAll({
     where: query,
     order: [
       ['createdAt', 'DESC']
