@@ -18,7 +18,9 @@ node ./app.js   // 启动服务器
 
 打开浏览器输入： http://127.0.0.1:8888/ 就可以访问项目啦(前端代码地址：https://github.com/caiheping/node-blog-client)
 
-登录账号：admin，密码： 123456
+admin登录账号：admin，密码： 123456，admin用户只能管理用户，没有前端博客界面。
+普通用户账号密码自己用admin去用户管理创建
+
 
 ## 说明
 
