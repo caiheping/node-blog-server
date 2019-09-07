@@ -127,6 +127,7 @@ router.get('/admin/home', async (ctx, next) => {
 // 图片上传
 router.post('/uploadImg', async (ctx, next) => {
   const file = ctx.request.files.file;
+  console.log(file)
   let urlPath = file.path.substring(file.path.lastIndexOf('/'))
   console.log(urlPath)
   // 返回保存的路径
