@@ -90,8 +90,8 @@ router.get('/admin/home', async (ctx, next) => {
   let allArticle
   let allUser
   let allNote
+  // 判断是否是超级用户 0： 超级用户， 1： 普通用户
   if (user.level === 0) {
-    console.log(999)
     allArticle = await Models.Article.count()
     allUser = await Models.User.count()
     allNote = await Models.Note.count()
