@@ -184,7 +184,8 @@ router.post('/admin/article/addArticle', async (ctx, next) => {
   let preface = ctx.request.body.preface ? ctx.request.body.preface : '';
   let content = ctx.request.body.content ? ctx.request.body.content : '';
   let type = ctx.request.body.type ? ctx.request.body.type : '';
-  let cover_photo = ctx.request.body.cover_photo ? ctx.request.body.cover_photo : '';
+  let file = ctx.request.files.file ? ctx.request.files.file : '';
+  let cover_photo = 'http://' + ctx.headers.host + '/static/upload' + file.path.substring(file.path.lastIndexOf('/'))
   if (!u_id || !title || !preface || !content || !type || !cover_photo) {
     return ctx.body = {
       code: 1,
@@ -225,7 +226,8 @@ router.post('/admin/article/updateArticle', async (ctx, next) => {
   let preface = ctx.request.body.preface ? ctx.request.body.preface : '';
   let content = ctx.request.body.content ? ctx.request.body.content : '';
   let type = ctx.request.body.type ? ctx.request.body.type : '';
-  let cover_photo = ctx.request.body.cover_photo ? ctx.request.body.cover_photo : '';
+  let file = ctx.request.files.file ? ctx.request.files.file : '';
+  let cover_photo = 'http://' + ctx.headers.host + '/static/upload' + file.path.substring(file.path.lastIndexOf('/'))
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
   if (!id || !title || !preface || !content || !type || !cover_photo) {
     return ctx.body = {
