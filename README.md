@@ -9,6 +9,8 @@
 前提：首先安装MySQL数据库，然后修改config目录下config.json配置文件（数据库的用户名和密码）
 
 ```
+git clone https://github.com/caiheping/node-blog-server.git
+cd ./node-blog-server
 npm install   // 安装依赖
 npx sequelize-cli db:created    // 创建数据库
 npx sequelize-cli db:migrate    // 生成迁移文件

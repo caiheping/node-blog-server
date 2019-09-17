@@ -1,5 +1,6 @@
 const Router = require('koa-router');
 const Models = require('../../models/index');
+const koaRequest = require('koa2-request');
 
 
 const router = new Router();
@@ -96,10 +97,20 @@ router.get('/fornt/article/findArticleById', async (ctx, next) => {
   }
 })
 
+// 获取ip地址
+router.get('/fornt/getIp', async (ctx, next) => {
+	let res = await koaRequest('http://pv.sohu.com/cityjson?ie=utf-8')
+	return ctx.body = {
+		code: 0,
+		cip: JSON.parse(res.body.split('=')[1].split(',')[0].split(':')[1])
+	}
+})
+
 // 设置浏览量
 router.post('/fornt/article/setBrowse', async (ctx, next) => {
   let a_id = ctx.request.body.a_id
-  let ip = ctx.header['x-forwarded-for']
+  let ip = ctx.request.body.ip
+  console.log(ip)
   if (!a_id || !ip) {
     return ctx.body = {
       code: 1,
@@ -143,7 +154,7 @@ router.post('/fornt/article/setBrowse', async (ctx, next) => {
 // 喜欢
 router.post('/front/article/like', async (ctx, next) => {
   let a_id = ctx.request.body.a_id
-  let ip = ctx.header['x-forwarded-for']
+  let ip = ctx.request.body.ip
   if (!a_id || !ip) {
     return ctx.body = {
       code: 1,
@@ -184,7 +195,7 @@ router.post('/front/article/like', async (ctx, next) => {
   } else {
     ctx.body = {
       code: 1,
-      data: '不能重复添加喜欢'
+      data: '已添加喜欢'
     }
   }
 })
