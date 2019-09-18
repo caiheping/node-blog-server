@@ -47,6 +47,29 @@ router.get('/admin/user/findUser', async (ctx, next) => {
   }
 })
 
+router.get('/admin/user/findUserById', async (ctx, next) => {
+  let u_id = ctx.query.u_id ? ctx.query.u_id : ''
+  if (!u_id) {
+    return ctx.body = {
+      code: 1,
+      data: '缺少参数'
+    }
+  }
+  let query = {
+    id: u_id
+  }
+  let user = await Models.User.findOne({
+    where: query
+  })
+  ctx.body = {
+    code: 0,
+    data: {
+      userInfo: user
+    }
+
+  }
+})
+
 // 添加用户
 router.post('/admin/user/addUser', async (ctx, next) => {
   let username = ctx.request.body.username ? ctx.request.body.username : '';
@@ -248,7 +271,6 @@ router.post('/admin/user/updateSkill', async (ctx, next) => {
 // 编辑个人简介信息
 router.post('/admin/user/updateUserInfo', async (ctx, next) => {
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
-  let avatar = ctx.request.body.avatar ? ctx.request.body.avatar : '';
   let nickname = ctx.request.body.nickname ? ctx.request.body.nickname : '';
   let motto = ctx.request.body.motto ? ctx.request.body.motto : '';
   let hobby = ctx.request.body.hobby ? ctx.request.body.hobby : '';
@@ -260,14 +282,8 @@ router.post('/admin/user/updateUserInfo', async (ctx, next) => {
   let RSS = ctx.request.body.RSS ? ctx.request.body.RSS : '';
   let email = ctx.request.body.email ? ctx.request.body.email : '';
 
-  if (!id) {
-    return ctx.body = {
-      code: 1,
-      data: '缺少参数id'
-    }
-  }
-  let res = await Models.User.update({
-    avatar,
+
+  let query = {
     nickname,
     motto,
     hobby,
@@ -277,12 +293,27 @@ router.post('/admin/user/updateUserInfo', async (ctx, next) => {
     wechat,
     RSS,
     email
-  },
-  {
-    where: {
-      id: id // 查询条件
+  }
+  if (ctx.request.files.file) {
+    let file = ctx.request.files.file ? ctx.request.files.file : '';
+    let avatar = 'http://' + ctx.headers.host + '/static/upload' + file.path.substring(file.path.lastIndexOf('/'))
+    query.avatar = avatar
+  }
+
+  if (!id) {
+    return ctx.body = {
+      code: 1,
+      data: '缺少参数id'
     }
-  })
+  }
+  let res = await Models.User.update(
+    query,
+    {
+      where: {
+        id: id // 查询条件
+      }
+    }
+  )
 
   ctx.body = {
     code: 0,

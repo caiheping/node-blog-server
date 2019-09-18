@@ -24,7 +24,7 @@ router.get('/admin/other/findBanner', async (ctx, next) => {
   let res = await Models.Banner.findAll({
     where: query,
     order: [
-      ['createdAt', 'DESC']
+      ['index', 'ASC']
     ]
   })
   ctx.body = {
@@ -37,7 +37,8 @@ router.get('/admin/other/findBanner', async (ctx, next) => {
 router.post('/admin/other/addBanner', async (ctx, next) => {
   let u_id = ctx.request.body.u_id ? parseInt(ctx.request.body.u_id) : '';
   let index = ctx.request.body.index ? parseInt(ctx.request.body.index) : '';
-  let url = ctx.request.body.url ? ctx.request.body.url : '';
+  let file = ctx.request.files.file ? ctx.request.files.file : '';
+  let url = 'http://' + ctx.headers.host + '/static/upload' + file.path.substring(file.path.lastIndexOf('/'))
   if (!u_id || !index || !url) {
     return ctx.body = {
       code: 1,
@@ -75,8 +76,9 @@ router.post('/admin/other/deleteBanner', async (ctx, next) => {
 // 修改轮播图
 router.post('/admin/other/updateBanner', async (ctx, next) => {
   let index = ctx.request.body.index ? parseInt(ctx.request.body.index) : '';
-  let url = ctx.request.body.url ? ctx.request.body.url : '';
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
+  let file = ctx.request.files.file ? ctx.request.files.file : '';
+  let url = 'http://' + ctx.headers.host + '/static/upload' + file.path.substring(file.path.lastIndexOf('/'))
   if (!id || !index || !url) {
     return ctx.body = {
       code: 1,
