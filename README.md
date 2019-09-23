@@ -6,7 +6,7 @@
 后端技术栈：node + koa2 + sequelize + mysql
 
 ### 项目运行
-前提：首先安装MySQL数据库，然后修改config目录下config.json配置文件（数据库的用户名和密码）
+前提：首先安装node和mysql，然后修改config目录下config.json配置文件（数据库的用户名和密码）
 
 ```
 git clone https://github.com/caiheping/node-blog-server.git
