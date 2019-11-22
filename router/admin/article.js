@@ -227,15 +227,25 @@ router.post('/admin/article/updateArticle', async (ctx, next) => {
   let content = ctx.request.body.content ? ctx.request.body.content : '';
   let type = ctx.request.body.type ? ctx.request.body.type : '';
   let file = ctx.request.files.file ? ctx.request.files.file : '';
-  let cover_photo = 'http://' + ctx.headers.host + '/static/upload' + file.path.substring(file.path.lastIndexOf('/'))
   let id = ctx.request.body.id ? parseInt(ctx.request.body.id) : '';
-  if (!id || !title || !preface || !content || !type || !cover_photo) {
+  let cover_photo
+  if (!id || !title || !preface || !content || !type) {
     return ctx.body = {
       code: 1,
       data: '缺少参数'
     }
   }
 
+  if (file) {
+    cover_photo = 'http://' + ctx.headers.host + '/static/upload' + file.path.substring(file.path.lastIndexOf('/'))
+  } else {
+    let beforeData = await Models.Article.findOne({
+      where: {
+        id
+      }
+    })
+    cover_photo = beforeData.cover_photo
+  }
   let res = await Models.Article.update({
     title,
     content,

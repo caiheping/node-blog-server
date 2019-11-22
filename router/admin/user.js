@@ -43,7 +43,6 @@ router.get('/admin/user/findUser', async (ctx, next) => {
       rows: userList.rows,
       count: userList.count
     }
-
   }
 })
 
